@@ -1,6 +1,5 @@
 package com.example.awstrain;
 
-import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,15 +22,10 @@ public class ProductController {
 
     @GetMapping("/{id}")
     ResponseEntity<Product> getProduct(@PathVariable(name = "id") Long id) {
-        Optional<Product> product = repository.findById(id);
-        ResponseEntity<Product> result;
-        if (product.isEmpty()) {
-            result = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            result = new ResponseEntity<Product>(product.get(), HttpStatus.OK);
-        }
+        return repository.findById(id)
+            .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+            .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
-        return result;
     }
 
     @PutMapping("/{id}/add")
