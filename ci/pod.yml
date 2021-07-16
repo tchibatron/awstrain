@@ -9,6 +9,6 @@ spec:
     - name: nodeapp
       image: tchibatron/awstrain:latest
       ports:
-        - containerPort: 8080
+      - containerPort: 8080
   imagePullSecrets:
     - name: regcred
