@@ -35,4 +35,5 @@ test {
 docker {
     name 'awstrain'
     files bootJar.archiveFile
+    tag 'docker.io', 'docker.io/tchibatron/awstrain'
 }
