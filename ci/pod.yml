@@ -6,9 +6,9 @@ metadata:
     app: nodeapp
 spec:
   containers:
-    - name: nodeapp
-      image: tchibatron/awstrain:latest
-      ports:
-      - containerPort: 8080
+  - name: nodeapp
+    image: tchibatron/awstrain:latest
+    ports:
+    - containerPort: 8080
   imagePullSecrets:
     - name: regcred
