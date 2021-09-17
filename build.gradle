@@ -3,6 +3,8 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id "com.palantir.docker" version "0.26.0"
+    id "com.github.johnrengelman.shadow" version "7.0.0"
+
 }
 
 group = 'com.example'
@@ -27,10 +29,21 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    implementation 'org.springframework.boot:spring-boot-starter-aop:2.5.2'
-    implementation 'com.amazonaws:aws-xray-recorder-sdk-spring:2.9.0'
+    implementation 'org.springframework.cloud:spring-cloud-starter-function-web:3.1.3'
+    implementation 'org.springframework.cloud:spring-cloud-function-adapter-aws:3.1.3'
+    implementation 'com.amazonaws:aws-lambda-java-events:3.10.0'
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
+
+
+
 
 }
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2020.0.3"
+    }
+}
+
 
 test {
     useJUnitPlatform()
@@ -40,4 +53,30 @@ docker {
     name 'awstrain'
     files bootJar.archiveFile
     tag 'docker.io', 'docker.io/tchibatron/awstrain'
+}
+assemble.dependsOn = [shadowJar]
+
+import com.github.jengelman.gradle.plugins.shadow.transformers.*
+
+shadowJar {
+    classifier = 'aws'
+    dependencies {
+        exclude(
+            dependency("org.springframework.cloud:spring-cloud-function-web:3.1.3"))
+    }
+    // Required for Spring
+    mergeServiceFiles()
+    append 'META-INF/spring.handlers'
+    append 'META-INF/spring.schemas'
+    append 'META-INF/spring.tooling'
+    transform(PropertiesFileTransformer) {
+        paths = ['META-INF/spring.factories']
+        mergeStrategy = "append"
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.example.awstrain.AwstrainApplication'
+    }
 }

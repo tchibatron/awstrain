@@ -5,12 +5,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 @Data
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class Product {
 
     @Id
