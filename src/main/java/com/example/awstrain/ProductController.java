@@ -21,7 +21,7 @@ public class ProductController {
     ProductRepository repository;
 
     @GetMapping("/{id}")
-    ResponseEntity<Product> getProduct(@PathVariable(name = "id") Long id) {
+    ResponseEntity<Product> getProduct(@PathVariable(name = "id") String id) {
         return repository.findById(id)
             .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -29,8 +29,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}/add")
-    Product getProduct(@PathVariable(name = "id") Long id, @RequestBody Product product) {
-        product.setId(id);
+    Product getProduct(@PathVariable(name = "id") String id, @RequestBody Product product) {
         return repository.save(product);
 
     }

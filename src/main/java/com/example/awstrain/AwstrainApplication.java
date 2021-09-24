@@ -17,14 +17,5 @@ public class AwstrainApplication {
         SpringApplication.run(AwstrainApplication.class, args);
     }
 
-    @Bean
-    public Function<Long, Product> products() {
-        return (id) -> repository.findById(id).orElseThrow(RuntimeException::new);
-    }
-
-    @Bean
-	public Function<Product, Product> createProduct() {
-		return (product) ->repository.save(product);
-	}
 
 }
